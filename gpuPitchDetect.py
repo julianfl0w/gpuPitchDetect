@@ -79,6 +79,7 @@ if __name__ == "__main__":
     # load the wav file
     y, sr = librosa.load(infile, sr=None)
 
+    
     # get a section in the middle of sample for processing
     z = y[int(len(y) / 2) : int(len(y) / 2 + 2 ** 15)]
 
@@ -90,12 +91,12 @@ if __name__ == "__main__":
         device=device,subdivisionOfSemitone=1.0, midistart=30, midiend=110, sr=sr, multiple=multiple,
     )
 
-    pitchDetect.x.setBuffer(z)
+    pitchDetect.gpuBuffers.x.set(z)
     for i in range(10):
         pitchDetect.debugRun()
     # pitchDetect.dumpMemory()
     readstart = time.time()
-    pitchDetect.absresult = pitchDetect.L.getAsNumpyArray()
+    pitchDetect.absresult = pitchDetect.gpuBuffers.L.getAsNumpyArray()
     print("Readtime " + str(time.time() - readstart))
     v2time = time.time()
     pitchDetect.findNote()
