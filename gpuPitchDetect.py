@@ -1,11 +1,9 @@
-
+import os
+import sys
 
 # check if dev is active
 import pkg_resources
-import os
-import sys
 gpd_home = os.path.dirname(os.path.abspath(__file__))
-
 if "loiacono" not in [pkg.key for pkg in pkg_resources.working_set]:
     sys.path = [os.path.join(gpd_home, "..", "loiacono")] + sys.path
 from loiacono_gpu import *
@@ -105,11 +103,9 @@ if __name__ == "__main__":
 
     print(len(pitchDetect.absresult))
 
-    fig, ((ax1, ax2)) = plt.subplots(1, 2)
-    #fig, ((ax1)) = plt.subplots(1, 1)
-    ax1.plot(pitchDetect.midiIndices, pitchDetect.absresult)
-    ax2.plot(pitchDetect.notePattern)
-
-    plt.show()
-
-    # print(json.dumps(list(ar), indent=2))
+    if False:
+        fig, ((ax1, ax2)) = plt.subplots(1, 2)
+        #fig, ((ax1)) = plt.subplots(1, 1)
+        ax1.plot(pitchDetect.midiIndices, pitchDetect.absresult)
+        ax2.plot(pitchDetect.notePattern)
+        plt.show()
