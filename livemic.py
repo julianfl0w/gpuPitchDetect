@@ -5,7 +5,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import numpy as np
 
-blocksize = 512*2
+blocksize = 512*4
 sr = 44100
 
 inStream = sd.InputStream(
@@ -49,11 +49,13 @@ spectrum_lpf = np.zeros((len(pitchDetect.fprime)))
 while(1):
     inmic, underflow = inStream.read(blocksize)
     spectrum = pitchDetect.feed(inmic)
-    inertia = 0.8
+    inertia = 0.6
     spectrum_lpf = (inertia*spectrum_lpf) + ((1-inertia)*spectrum)
     line1.set_ydata(spectrum)
     #line1.set_ydata(pitchDetect.gpuBuffers.x.getAsNumpyArray())
     fig.canvas.draw()
     fig.canvas.flush_events()
+    pitchDetect.findNote()
+    #print(pitchDetect.harmonicAmplitude)
     #print(pitchDetect.gpuBuffers.offset.getAsNumpyArray())
     

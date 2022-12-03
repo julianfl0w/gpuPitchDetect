@@ -43,14 +43,15 @@ class GPUPitchDetect(Loiacono_GPU):
         # only need to do this once
         self.notePattern = np.zeros(int(self.midiRange / 2 * subdivisionOfSemitone))
         zerothFreq = note2Freq(0)
-        
+        self.noteIndices = []
         print("hnotes")
         for harmonic in range(1, 6):
             hfreq = zerothFreq * harmonic
             hnote = freq2Note(hfreq) * subdivisionOfSemitone
+            self.noteIndices += [hnote]
             print(hnote)
             if hnote < len(self.notePattern):
-                self.notePattern[int(hnote)] = 1/(harmonic)
+                self.notePattern[int(hnote)] = 1#1/(harmonic)
 
         Loiacono_GPU.__init__(
             self, device, self.fprime, self.multiple,
@@ -64,8 +65,8 @@ class GPUPitchDetect(Loiacono_GPU):
         self.selectedNote = self.midistart + self.maxIndex / self.subdivisionOfSemitone
         #self.selectedAmplitude = self.notesPadded[self.maxIndex]
         endTime = time.time()
-        print("correlate runtime (s) : " + str(endTime - startTime))
-
+        #print("correlate runtime (s) : " + str(endTime - startTime))
+        self.harmonicAmplitude = self.absresult[(self.maxIndex + self.noteIndices).astype(int)]
         # print("selectedNote " + str(selectedNote))
         # print("expected " + str([selectedNote + h for h in self.hnotes]))
 
