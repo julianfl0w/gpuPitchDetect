@@ -3,10 +3,11 @@ import sys
 
 # check if dev is active
 import pkg_resources
+import numpy as np
 gpd_home = os.path.dirname(os.path.abspath(__file__))
-if "loiacono" not in [pkg.key for pkg in pkg_resources.working_set]:
-    sys.path = [os.path.join(gpd_home, "..", "loiacono")] + sys.path
-from loiacono_gpu import *
+if "vulkanese" not in [pkg.key for pkg in pkg_resources.working_set]:
+    sys.path = [os.path.join(gpd_home, "..", "vulkanese")] + sys.path
+from vulkanese.math.loiacono import loiacono_gpu as loiacono_gpu
 
 def freq2Note(f, A4=440.0):
     # A4, MIDI index 69
@@ -18,7 +19,7 @@ def note2Freq(note, A4=440.0):
     return (A4 / 32) * (2 ** ((note - 9) / 12.0))
 
 
-class GPUPitchDetect(Loiacono_GPU):
+class GPUPitchDetect(loiacono_gpu.Loiacono_GPU):
     def __init__(
         self,
         device,
@@ -53,7 +54,7 @@ class GPUPitchDetect(Loiacono_GPU):
             if hnote < len(self.notePattern):
                 self.notePattern[int(hnote)] = 1#1/(harmonic)
 
-        Loiacono_GPU.__init__(
+        loiacono_gpu.Loiacono_GPU.__init__(
             self, device, self.fprime, self.multiple,
         )
 
